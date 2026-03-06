@@ -25,3 +25,16 @@ package-lock.json
 # Misc
 _sass/vendors
 assets/js/dist
+
+# Old Hexo artifacts
+2020/
+about/
+archives/
+categories/
+css/
+fancybox/
+images/
+js/
+lib/
+tags/
+index.html
