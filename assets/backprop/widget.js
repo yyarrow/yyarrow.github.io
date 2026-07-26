@@ -9,16 +9,16 @@
   if (window.ResizeObserver) new ResizeObserver(send).observe(document.body);
   setTimeout(send, 120); setTimeout(send, 600);
 
-  // --- 主题同步：镜像宿主页（Chirpy）<html data-mode> 到 iframe 自身 ---
-  // 宿主与 iframe 同源；万一跨域取不到，静默退回 prefers-color-scheme。
+  // --- 主题同步：镜像宿主页（Chirpy 7 / Bootstrap 5.3）<html data-bs-theme> 到 iframe 自身 ---
+  // Chirpy 总会把解析后的主题写进该属性（含"跟随系统"）；万一跨域取不到，静默退回 prefers-color-scheme。
   function syncMode(){
-    var m = parent.document.documentElement.getAttribute('data-mode');
-    if (m) document.documentElement.setAttribute('data-mode', m);
-    else document.documentElement.removeAttribute('data-mode');
+    var m = parent.document.documentElement.getAttribute('data-bs-theme');
+    if (m) document.documentElement.setAttribute('data-bs-theme', m);
+    else document.documentElement.removeAttribute('data-bs-theme');
   }
   try {
     syncMode();
     new MutationObserver(syncMode)
-      .observe(parent.document.documentElement, {attributes:true, attributeFilter:['data-mode']});
+      .observe(parent.document.documentElement, {attributes:true, attributeFilter:['data-bs-theme']});
   } catch(e) {}
 })();

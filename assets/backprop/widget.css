@@ -5,15 +5,15 @@
   --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:system-ui,-apple-system,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;
 }
-/* 暗色两条路径：跟随系统（未手动切换时），或跟随宿主页 Chirpy 的 data-mode 开关（由 widget.js 镜像进来） */
+/* 暗色两条路径：宿主页 Chirpy 的 data-bs-theme（由 widget.js 镜像进来，优先），或独立打开时跟随系统 */
 @media (prefers-color-scheme:dark){
-  :root:not([data-mode=light]){
+  :root:not([data-bs-theme=light]){
     --panel:#151b22; --panel-2:#1b222b; --line:#2b343f;
     --ink:#dce3eb; --ink-2:#8c99a8; --ink-3:#5c6875;
     --fwd:#4ec9dc; --bwd:#f0a830; --hot:#e85d8a; --ok:#7dd87d;
   }
 }
-:root[data-mode=dark]{
+:root[data-bs-theme=dark]{
   --panel:#151b22; --panel-2:#1b222b; --line:#2b343f;
   --ink:#dce3eb; --ink-2:#8c99a8; --ink-3:#5c6875;
   --fwd:#4ec9dc; --bwd:#f0a830; --hot:#e85d8a; --ok:#7dd87d;

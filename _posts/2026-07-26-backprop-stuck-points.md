@@ -18,8 +18,8 @@ description: "教科书按数学的流向讲，人按困惑的顺序卡。这篇
 .bp-frame{width:100%;border:0;display:block;margin:1.5em 0}
 .bp-cap{font-size:13px;opacity:.6;text-align:center;margin:-1em 0 1.8em}
 .bp-pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.85;padding:16px;border:1px solid rgba(128,128,128,.28);border-radius:9px;overflow-x:auto;margin:1.4em 0}
-@media (prefers-color-scheme:dark){html:not([data-mode=light]) .bp-fx .c1{color:#4ec9dc}html:not([data-mode=light]) .bp-fx .c2{color:#f0a830}html:not([data-mode=light]) .bp-fx .c3{color:#e85d8a}}
-html[data-mode=dark] .bp-fx .c1{color:#4ec9dc}html[data-mode=dark] .bp-fx .c2{color:#f0a830}html[data-mode=dark] .bp-fx .c3{color:#e85d8a}
+@media (prefers-color-scheme:dark){html:not([data-bs-theme=light]) .bp-fx .c1{color:#4ec9dc}html:not([data-bs-theme=light]) .bp-fx .c2{color:#f0a830}html:not([data-bs-theme=light]) .bp-fx .c3{color:#e85d8a}}
+html[data-bs-theme=dark] .bp-fx .c1{color:#4ec9dc}html[data-bs-theme=dark] .bp-fx .c2{color:#f0a830}html[data-bs-theme=dark] .bp-fx .c3{color:#e85d8a}
 </style>
 
 上个月我花了大半天，跟 Claude 把反向传播从头到尾问了一遍。不是第一次学——之前看过公式、抄过推导、甚至照着写过代码——但一直有种"每一步都能跟上、合起来说不清"的感觉。
