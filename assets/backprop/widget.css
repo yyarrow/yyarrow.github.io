@@ -1,0 +1,55 @@
+:root{
+  --panel:#fbfcfd; --panel-2:#f2f4f7; --line:#e0e5ea;
+  --ink:#1c242e; --ink-2:#5a6672; --ink-3:#8b95a1;
+  --fwd:#0d7383; --bwd:#9a5c00; --hot:#b4145a; --ok:#2e7d32;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:system-ui,-apple-system,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;
+}
+/* 暗色两条路径：跟随系统（未手动切换时），或跟随宿主页 Chirpy 的 data-mode 开关（由 widget.js 镜像进来） */
+@media (prefers-color-scheme:dark){
+  :root:not([data-mode=light]){
+    --panel:#151b22; --panel-2:#1b222b; --line:#2b343f;
+    --ink:#dce3eb; --ink-2:#8c99a8; --ink-3:#5c6875;
+    --fwd:#4ec9dc; --bwd:#f0a830; --hot:#e85d8a; --ok:#7dd87d;
+  }
+}
+:root[data-mode=dark]{
+  --panel:#151b22; --panel-2:#1b222b; --line:#2b343f;
+  --ink:#dce3eb; --ink-2:#8c99a8; --ink-3:#5c6875;
+  --fwd:#4ec9dc; --bwd:#f0a830; --hot:#e85d8a; --ok:#7dd87d;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:transparent}
+body{font-family:var(--sans);color:var(--ink);font-size:15px;line-height:1.6}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+svg{display:block;width:100%;height:auto}
+text{font-family:var(--mono);fill:var(--ink-2)}
+.t-lab{font-size:13px;fill:var(--ink)}
+.t-sm{font-size:11px;fill:var(--ink-3)}
+.t-val{font-size:12px;font-weight:500}
+.wire{stroke:var(--line);stroke-width:1.4;fill:none}
+.wire.on-f{stroke:var(--fwd);stroke-width:2}
+.wire.on-b{stroke:var(--bwd);stroke-width:2}
+.node-c{fill:var(--panel-2);stroke:var(--line)}
+.node-c.on-f{stroke:var(--fwd);fill:color-mix(in srgb,var(--fwd) 14%,transparent)}
+.node-c.on-b{stroke:var(--bwd);fill:color-mix(in srgb,var(--bwd) 14%,transparent)}
+.cellr{fill:var(--panel-2);stroke:var(--line);transition:fill .18s,stroke .18s}
+.cellr.lit{fill:color-mix(in srgb,var(--fwd) 16%,transparent);stroke:var(--fwd)}
+.cellr.litb{fill:color-mix(in srgb,var(--bwd) 16%,transparent);stroke:var(--bwd)}
+.cellr.hot{fill:color-mix(in srgb,var(--hot) 16%,transparent);stroke:var(--hot)}
+.hitwire{stroke:transparent;stroke-width:16;fill:none;cursor:pointer}
+.fade{opacity:0;transition:opacity .35s}
+.fade.show{opacity:1}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border-top:1px solid var(--line);background:var(--panel-2);font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.bar .note{margin-left:auto;color:var(--ink-3)}
+button{font:inherit;font-family:var(--sans);font-size:13.5px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:6px 13px;cursor:pointer;transition:border-color .15s,background .15s}
+button:hover{border-color:var(--ink-3)}
+button.f{border-color:var(--fwd);color:var(--fwd)}
+button.b{border-color:var(--bwd);color:var(--bwd)}
+button[aria-pressed=true]{background:color-mix(in srgb,var(--fwd) 12%,transparent);border-color:var(--fwd);color:var(--fwd)}
+button:disabled{opacity:.4;cursor:default}
+input[type=range]{flex:1;min-width:110px;accent-color:var(--fwd)}
+.v{color:var(--fwd);min-width:48px;text-align:right;font-weight:500}
+.v.b{color:var(--bwd)}
+:focus-visible{outline:2px solid var(--fwd);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}

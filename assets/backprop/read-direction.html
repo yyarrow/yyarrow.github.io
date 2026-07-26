@@ -1,0 +1,54 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>读取方向</title>
+<link rel="stylesheet" href="widget.css">
+<div class="card">
+
+<svg viewBox="0 0 660 300" role="img" aria-label="前向横着读行，反向竖着读列">
+ <g id="gc"></g><g id="gl"></g>
+ <text class="t-lab" id="eq" x="330" y="262" text-anchor="middle"></text>
+ <text class="t-sm" id="sub" x="330" y="286" text-anchor="middle"></text>
+</svg>
+<div class="bar">
+ <button class="f" id="br" aria-pressed="false">&#21069;&#21521;&#65306;&#27178;&#30528;&#35835;&#19968;&#34892;</button>
+ <button class="b" id="bc" aria-pressed="false">&#21453;&#21521;&#65306;&#31446;&#30528;&#35835;&#19968;&#21015;</button>
+</div>
+</div>
+<script>
+(function(){"use strict";
+var RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function $(s){return document.querySelector(s)}
+function sleep(ms){return new Promise(function(r){setTimeout(r,RM?0:ms)})}
+function el(t,a,x){var e=document.createElementNS('http://www.w3.org/2000/svg',t);
+for(var k in a)e.setAttribute(k,a[k]); if(x!=null)e.textContent=x; return e}
+
+var M=[[.2,.5,-.3],[.4,-.1,.6]],CX=[200,310,420],CY=[90,160],CW=100,CH=60;
+var gc=$('#gc'),gl=$('#gl'),cells=[];
+for(var i=0;i<2;i++)for(var j=0;j<3;j++){
+ var r=el('rect',{'class':'cellr',x:CX[j],y:CY[i],width:CW,height:CH,rx:5,'stroke-width':1});
+ var t=el('text',{'class':'t-val',x:CX[j]+CW/2,y:CY[i]+CH/2+5,'text-anchor':'middle',style:'fill:var(--ink-2)'},M[i][j]);
+ gc.appendChild(r);gc.appendChild(t);cells.push({r:r,t:t})}
+['\u6765\u81ea a\u2081','\u6765\u81ea a\u2082','\u6765\u81ea a\u2083'].forEach(function(s,k){
+ gl.appendChild(el('text',{'class':'t-sm',x:CX[k]+CW/2,y:78,'text-anchor':'middle'},s))});
+['\u53bb\u5f80 z\u2081','\u53bb\u5f80 z\u2082'].forEach(function(s,k){
+ gl.appendChild(el('text',{'class':'t-sm',x:190,y:CY[k]+CH/2+4,'text-anchor':'end'},s))});
+var eq=$('#eq'),sub=$('#sub'),run=false;
+function clr(){cells.forEach(function(c){c.r.classList.remove('lit','litb');c.t.style.fill='var(--ink-2)'});eq.textContent='';sub.textContent=''}
+async function go(m){ if(run)return; run=true; clr();
+ $('#br').setAttribute('aria-pressed',m==='row');$('#bc').setAttribute('aria-pressed',m==='col');
+ var seq = m==='row' ? [0,1,2].map(function(j){return {c:cells[j],l:M[0][j]+'\u00b7a'+(j+1)}})
+                     : [0,1].map(function(i){return {c:cells[i*3+1],l:M[i][1]+'\u00b7\u03b4'+(i+1)}});
+ var head = m==='row' ? 'z\u2081 = ' : '\u2202L/\u2202a\u2082 = ';
+ var cl = m==='row'?'lit':'litb', col = m==='row'?'var(--fwd)':'var(--bwd)', acc='';
+ eq.style.fill=col;
+ for(var k=0;k<seq.length;k++){
+  seq[k].c.r.classList.add(cl);seq[k].c.t.style.fill=col;
+  acc+=(k?' + ':'')+seq[k].l; eq.textContent=head+acc; await sleep(560)}
+ sub.textContent = m==='row' ? '\u56fa\u5b9a\u884c\u53f7 i\uff0c\u626b\u8fc7\u6240\u6709\u5217 \u2014\u2014 \u6a2a\u7740\u8bfb\uff0c\u8fd9\u5c31\u662f\u666e\u901a\u77e9\u9635\u4e58\u6cd5 Wa'
+                             : '\u56fa\u5b9a\u5217\u53f7 j\uff0c\u626b\u8fc7\u6240\u6709\u884c \u2014\u2014 \u7ad6\u7740\u8bfb\uff0c\u53ea\u6709\u5148\u8f6c\u7f6e\u624d\u80fd\u505a\u5230';
+ sub.style.fill=col; run=false}
+$('#br').onclick=function(){go('row')};$('#bc').onclick=function(){go('col')};clr();
+})();
+</script>
+<script src="widget.js"></script>

@@ -1,0 +1,95 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>前向与反向</title>
+<link rel="stylesheet" href="widget.css">
+<div class="card">
+
+<svg viewBox="0 0 660 320" role="img" aria-label="两层神经网络的前向与反向数值流动">
+ <g id="wires">
+  <path class="wire" id="w-x1h1" d="M112 108 L296 108"/>
+  <path class="wire" id="w-x1h2" d="M112 108 L296 208"/>
+  <path class="wire" id="w-x2h1" d="M112 208 L296 108"/>
+  <path class="wire" id="w-x2h2" d="M112 208 L296 208"/>
+  <path class="wire" id="w-h1o"  d="M364 108 L548 158"/>
+  <path class="wire" id="w-h2o"  d="M364 208 L548 158"/>
+ </g>
+ <g class="fade" id="lay-w">
+  <text class="t-sm" x="204" y="98" text-anchor="middle">0.5</text>
+  <text class="t-sm" x="196" y="176" text-anchor="middle">0.2</text>
+  <text class="t-sm" x="212" y="142" text-anchor="middle">-0.3</text>
+  <text class="t-sm" x="204" y="224" text-anchor="middle">0.8</text>
+  <text class="t-sm" x="452" y="122" text-anchor="middle">0.6</text>
+  <text class="t-sm" x="452" y="200" text-anchor="middle">-0.4</text>
+ </g>
+ <circle class="node-c" id="n-x1" cx="90" cy="108" r="24" stroke-width="1.2"/>
+ <circle class="node-c" id="n-x2" cx="90" cy="208" r="24" stroke-width="1.2"/>
+ <circle class="node-c" id="n-h1" cx="330" cy="108" r="24" stroke-width="1.2"/>
+ <circle class="node-c" id="n-h2" cx="330" cy="208" r="24" stroke-width="1.2"/>
+ <circle class="node-c" id="n-o"  cx="570" cy="158" r="24" stroke-width="1.2"/>
+ <text class="t-lab" x="90"  y="113" text-anchor="middle">x&#8321;</text>
+ <text class="t-lab" x="90"  y="213" text-anchor="middle">x&#8322;</text>
+ <text class="t-lab" x="330" y="113" text-anchor="middle">a&#8321;</text>
+ <text class="t-lab" x="330" y="213" text-anchor="middle">a&#8322;</text>
+ <text class="t-lab" x="570" y="163" text-anchor="middle">&#375;</text>
+ <text class="t-val fade" id="v-x1" x="90"  y="62"  text-anchor="middle" style="fill:var(--fwd)">1.0</text>
+ <text class="t-val fade" id="v-x2" x="90"  y="256" text-anchor="middle" style="fill:var(--fwd)">2.0</text>
+ <text class="t-val fade" id="v-h1" x="330" y="62"  text-anchor="middle" style="fill:var(--fwd)">0.475</text>
+ <text class="t-val fade" id="v-h2" x="330" y="256" text-anchor="middle" style="fill:var(--fwd)">0.858</text>
+ <text class="t-val fade" id="v-o"  x="570" y="112" text-anchor="middle" style="fill:var(--fwd)">0.485</text>
+ <text class="t-val fade" id="d-o"  x="570" y="214" text-anchor="middle" style="fill:var(--bwd)">&#948; -0.129</text>
+ <text class="t-val fade" id="d-h1" x="330" y="80"  text-anchor="middle" style="fill:var(--bwd)">&#948; -0.019</text>
+ <text class="t-val fade" id="d-h2" x="330" y="274" text-anchor="middle" style="fill:var(--bwd)">&#948; 0.0063</text>
+ <text class="t-val fade" id="d-x1" x="90"  y="80"  text-anchor="middle" style="fill:var(--bwd)">-0.0084</text>
+ <text class="t-val fade" id="d-x2" x="90"  y="274" text-anchor="middle" style="fill:var(--bwd)">0.0108</text>
+ <text class="t-sm" x="90"  y="302" text-anchor="middle">&#36755;&#20837;</text>
+ <text class="t-sm" x="330" y="302" text-anchor="middle">&#38544;&#34255;&#23618;</text>
+ <text class="t-sm" x="570" y="302" text-anchor="middle">&#36755;&#20986;</text>
+ <text class="t-sm fade" id="loss-lab" x="634" y="163" text-anchor="end" style="fill:var(--hot)">y=1.0</text>
+</svg>
+<div class="bar">
+ <button class="f" id="bf">&#9654; &#21069;&#21521;</button>
+ <button class="b" id="bb">&#9664; &#21453;&#21521;</button>
+ <button id="br">&#37325;&#32622;</button>
+ <span class="note" id="nt">&#28857;&#19968;&#19979;&#24320;&#22987;</span>
+</div>
+</div>
+<script>
+(function(){"use strict";
+var RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function $(s){return document.querySelector(s)}
+function sleep(ms){return new Promise(function(r){setTimeout(r,RM?0:ms)})}
+function el(t,a,x){var e=document.createElementNS('http://www.w3.org/2000/svg',t);
+for(var k in a)e.setAttribute(k,a[k]); if(x!=null)e.textContent=x; return e}
+
+var busy=false, nt=$('#nt');
+var WR=['w-x1h1','w-x1h2','w-x2h1','w-x2h2','w-h1o','w-h2o'];
+var ND=['n-x1','n-x2','n-h1','n-h2','n-o'];
+var VS=['v-x1','v-x2','v-h1','v-h2','v-o','d-o','d-h1','d-h2','d-x1','d-x2','lay-w','loss-lab'];
+function C(i,c,on){var e=document.getElementById(i); if(e)e.classList[on?'add':'remove'](c)}
+function S(i,on){C(i,'show',on!==false)}
+function reset(){VS.forEach(function(i){S(i,false)});
+ WR.concat(ND).forEach(function(i){C(i,'on-f',false);C(i,'on-b',false)});
+ nt.textContent='\u70b9\u4e00\u4e0b\u5f00\u59cb'}
+async function fwd(){ if(busy)return; busy=true; reset();
+ nt.textContent='\u524d\u5411\uff1a\u52a0\u6743\u6c42\u548c \u2192 \u8fc7\u6fc0\u6d3b\u51fd\u6570';
+ S('lay-w');S('v-x1');S('v-x2');C('n-x1','on-f',1);C('n-x2','on-f',1); await sleep(600);
+ ['w-x1h1','w-x1h2','w-x2h1','w-x2h2'].forEach(function(i){C(i,'on-f',1)}); await sleep(500);
+ S('v-h1');S('v-h2');C('n-h1','on-f',1);C('n-h2','on-f',1); await sleep(600);
+ ['w-h1o','w-h2o'].forEach(function(i){C(i,'on-f',1)}); await sleep(500);
+ S('v-o');C('n-o','on-f',1);S('loss-lab');
+ nt.textContent='\u9884\u6d4b 0.485\uff0c\u771f\u5b9e 1.0 \u2192 L = 0.1324'; busy=false}
+async function bwd(){ if(busy)return; busy=true;
+ if(!document.getElementById('v-o').classList.contains('show')){await fwd(); await sleep(400); busy=true}
+ WR.concat(ND).forEach(function(i){C(i,'on-f',false)});
+ nt.textContent='\u53cd\u5411\uff1a\u8d23\u4efb\u6cbf\u539f\u8def\u9000\u56de';
+ C('n-o','on-b',1);S('d-o'); await sleep(700);
+ ['w-h1o','w-h2o'].forEach(function(i){C(i,'on-b',1)}); await sleep(500);
+ S('d-h1');S('d-h2');C('n-h1','on-b',1);C('n-h2','on-b',1); await sleep(700);
+ ['w-x1h1','w-x1h2','w-x2h1','w-x2h2'].forEach(function(i){C(i,'on-b',1)}); await sleep(500);
+ S('d-x1');S('d-x2');C('n-x1','on-b',1);C('n-x2','on-b',1);
+ nt.textContent='\u8fde\u8f93\u5165\u7684\u68af\u5ea6\u4e5f\u7b97\u51fa\u6765\u4e86'; busy=false}
+$('#bf').onclick=fwd; $('#bb').onclick=bwd; $('#br').onclick=function(){if(!busy)reset()}; reset();
+})();
+</script>
+<script src="widget.js"></script>

@@ -1,0 +1,44 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>外积</title>
+<link rel="stylesheet" href="widget.css">
+<div class="card">
+
+<svg viewBox="0 0 660 290" role="img" aria-label="delta 与输入向量做外积生成权重梯度表">
+ <text class="t-sm" x="330" y="30" text-anchor="middle">&#27599;&#26684; = &#24038;&#36793;&#30340; &#948; &#215; &#19978;&#36793;&#30340; a</text>
+ <g id="gt"></g><g id="gl"></g><g id="gc"></g>
+</svg>
+<div class="bar"><button id="b1">&#36880;&#26684;&#35745;&#31639;</button><button id="b2">&#28165;&#31354;</button><span class="note" id="msg"></span></div>
+</div>
+<script>
+(function(){"use strict";
+var RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function $(s){return document.querySelector(s)}
+function sleep(ms){return new Promise(function(r){setTimeout(r,RM?0:ms)})}
+function el(t,a,x){var e=document.createElementNS('http://www.w3.org/2000/svg',t);
+for(var k in a)e.setAttribute(k,a[k]); if(x!=null)e.textContent=x; return e}
+
+var D=[.5,-.2],A=[1,2,3],CX=[248,358,468],CY=[100,172],CW=100,CH=64;
+var gt=$('#gt'),gl=$('#gl'),gc=$('#gc'),cells=[];
+A.forEach(function(v,j){gt.appendChild(el('text',{'class':'t-val',x:CX[j]+CW/2,y:80,'text-anchor':'middle',style:'fill:var(--fwd)'},'a'+(j+1)+' = '+v.toFixed(1)))});
+D.forEach(function(v,i){gl.appendChild(el('text',{'class':'t-val',x:238,y:CY[i]+CH/2+4,'text-anchor':'end',style:'fill:var(--bwd)'},'\u03b4'+(i+1)+' = '+v))});
+for(var i=0;i<2;i++)for(var j=0;j<3;j++){
+ var r=el('rect',{'class':'cellr',x:CX[j],y:CY[i],width:CW,height:CH,rx:5,'stroke-width':1});
+ var t1=el('text',{'class':'t-sm',x:CX[j]+CW/2,y:CY[i]+26,'text-anchor':'middle',opacity:0},D[i]+' \u00d7 '+A[j].toFixed(1));
+ var t2=el('text',{'class':'t-val',x:CX[j]+CW/2,y:CY[i]+48,'text-anchor':'middle',opacity:0,style:'fill:var(--hot)'},(D[i]*A[j]).toFixed(1));
+ gc.appendChild(r);gc.appendChild(t1);gc.appendChild(t2);cells.push({r:r,a:t1,b:t2,i:i,j:j})}
+gc.appendChild(el('text',{'class':'t-sm',x:330,y:266,'text-anchor':'middle'},'\u7ed3\u679c 2 \u884c 3 \u5217 \u2014\u2014 \u548c W \u7684\u5f62\u72b6\u5b8c\u5168\u4e00\u6837'));
+var run=false;
+function clr(){cells.forEach(function(c){c.r.classList.remove('hot');c.a.setAttribute('opacity',0);c.b.setAttribute('opacity',0)});$('#msg').textContent=''}
+$('#b2').onclick=function(){if(!run)clr()};
+$('#b1').onclick=async function(){if(run)return;run=true;clr();
+ for(var k=0;k<cells.length;k++){var c=cells[k];
+  c.r.classList.add('hot');c.a.setAttribute('opacity',1);
+  $('#msg').textContent='\u7b2c '+(c.i+1)+' \u884c\u7b2c '+(c.j+1)+' \u5217 = \u03b4'+(c.i+1)+' \u00d7 a'+(c.j+1);
+  await sleep(320);c.b.setAttribute('opacity',1);await sleep(240);c.r.classList.remove('hot')}
+ $('#msg').textContent='6 \u6839\u7ebf\uff0c6 \u4e2a\u68af\u5ea6 \u2014\u2014 \u586b\u6ee1\u4e86';run=false};
+clr();
+})();
+</script>
+<script src="widget.js"></script>

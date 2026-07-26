@@ -1,0 +1,56 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>sigmoid 导数</title>
+<link rel="stylesheet" href="widget.css">
+<div class="card">
+
+<svg viewBox="0 0 660 290" role="img" aria-label="sigmoid 函数与其导数，导数最大值 0.25">
+ <line x1="60" y1="240" x2="620" y2="240" stroke="var(--line)"/>
+ <line x1="340" y1="30" x2="340" y2="248" stroke="var(--line)" stroke-dasharray="3 4"/>
+ <line x1="60" y1="45" x2="620" y2="45" stroke="var(--line)" stroke-dasharray="2 4"/>
+ <text class="t-sm" x="628" y="49" text-anchor="end">&#963; = 1.0</text>
+ <line id="cap" x1="60" x2="620" stroke="var(--hot)" stroke-dasharray="2 4" opacity=".6"/>
+ <text class="t-sm" id="capl" x="628" text-anchor="end" style="fill:var(--hot)">&#963;&#8242; &#19978;&#38480; 0.25</text>
+ <path id="s1" d="" stroke="var(--fwd)" stroke-width="2" fill="none"/>
+ <path id="s2" d="" stroke="var(--hot)" stroke-width="2" fill="none"/>
+ <line id="zl" y1="30" y2="248" stroke="var(--bwd)" stroke-width="1.4"/>
+ <circle id="d1" r="6" style="fill:var(--fwd)"/><circle id="d2" r="6" style="fill:var(--hot)"/>
+ <text class="t-sm" x="70" y="262" style="fill:var(--fwd)">&#9473; &#963;(z)</text>
+ <text class="t-sm" x="150" y="262" style="fill:var(--hot)">&#9473; &#963;&#8242;(z)</text>
+ <text class="t-sm" x="340" y="262" text-anchor="middle">z = 0</text>
+</svg>
+<div class="bar"><span>z</span>
+ <input type="range" id="zr" min="-8" max="8" step="0.1" value="0" aria-label="z">
+ <span class="v" id="zv">0.00</span>
+ <span>&#963;=<b class="v" id="sv" style="min-width:auto">0.500</b></span>
+ <span>&#963;&#8242;=<b class="v b" id="dv" style="min-width:auto">0.250</b></span>
+</div>
+</div>
+<script>
+(function(){"use strict";
+var RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function $(s){return document.querySelector(s)}
+function sleep(ms){return new Promise(function(r){setTimeout(r,RM?0:ms)})}
+function el(t,a,x){var e=document.createElementNS('http://www.w3.org/2000/svg',t);
+for(var k in a)e.setAttribute(k,a[k]); if(x!=null)e.textContent=x; return e}
+
+function sg(v){return 1/(1+Math.exp(-v))}
+var X0=60,X1=620,Y0=240,H=195;
+function px(z){return X0+(z+8)/16*(X1-X0)}
+function py(v){return Y0-v*H}
+var a='',b='';
+for(var i=0;i<=160;i++){var z=-8+i/160*16,s=sg(z);
+ a+=(i?'L':'M')+px(z).toFixed(1)+' '+py(s).toFixed(1)+' ';
+ b+=(i?'L':'M')+px(z).toFixed(1)+' '+py(s*(1-s)).toFixed(1)+' '}
+$('#s1').setAttribute('d',a);$('#s2').setAttribute('d',b);
+var cy=py(.25);$('#cap').setAttribute('y1',cy);$('#cap').setAttribute('y2',cy);$('#capl').setAttribute('y',cy-6);
+function upd(z){var s=sg(z),d=s*(1-s);
+ $('#zl').setAttribute('x1',px(z));$('#zl').setAttribute('x2',px(z));
+ $('#d1').setAttribute('cx',px(z));$('#d1').setAttribute('cy',py(s));
+ $('#d2').setAttribute('cx',px(z));$('#d2').setAttribute('cy',py(d));
+ $('#zv').textContent=z.toFixed(2);$('#sv').textContent=s.toFixed(3);$('#dv').textContent=d.toFixed(3)}
+$('#zr').oninput=function(){upd(+this.value)};upd(0);
+})();
+</script>
+<script src="widget.js"></script>
